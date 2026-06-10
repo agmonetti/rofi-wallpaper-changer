@@ -8,7 +8,7 @@ window {
     height: 280px;
     anchor: center;
     location: center;
-    background-color: rgba(0,0,0,0.7);
+    background-color: transparent;
     border: 0;
 }
 
@@ -38,7 +38,7 @@ element selected {
     border: 0px 0px 4px 0px;
     border-color: #89b4fa;
     border-radius: 0px;
-    background-color: rgba(137,180,250,0.8);
+    background-color: transparent;
 }
 
 element-icon {
