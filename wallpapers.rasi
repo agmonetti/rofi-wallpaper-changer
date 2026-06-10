@@ -19,7 +19,7 @@ mainbox {
 
 listview {
     layout: horizontal;
-    spacing: -30px;
+    spacing: -45px;
     scrollbar: false;
     background-color: transparent;
     cycle: true;
@@ -42,7 +42,7 @@ element selected {
 }
 
 element-icon {
-    size: 160px; 
+    size: 220px; 
     horizontal-align: 0.5;
     vertical-align: 0.5;
 }
