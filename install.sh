@@ -33,6 +33,12 @@ if [[ "$SHELL" == *"zsh"* ]]; then
     SHELL_RC="$HOME/.zshrc"
 fi
 
+# Ensure ~/.local/bin is in PATH
+if ! grep -q 'export PATH=.*\$HOME/.local/bin' "$SHELL_RC" && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+    echo "Adding ~/.local/bin to PATH in $SHELL_RC..."
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$SHELL_RC"
+fi
+
 # Add to shell config if not already there
 if grep -q "export ROFI_WALL_DIR=" "$SHELL_RC"; then
     echo "Updating existing ROFI_WALL_DIR in $SHELL_RC..."
