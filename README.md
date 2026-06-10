@@ -9,6 +9,7 @@ A minimal wallpaper switcher using rofi with a horizontal icon-based picker. Bui
 - `rofi`
 - `hyprpaper`
 - `jq`
+- `imagemagick` (optional, heavily recommended for auto-generating thumbnails)
 
 ## Install
 

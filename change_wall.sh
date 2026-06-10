@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 WALL_DIR="${ROFI_WALL_DIR:-$HOME/wallpapers}"  # Use environment variable if it exists, otherwise default to ~/wallpapers
 CACHE_DIR="$HOME/.cache/rofi-wallpapers"
+mkdir -p "$CACHE_DIR"
 TMP=$(mktemp)
 
 NAMES=()
@@ -9,7 +10,15 @@ for file in "$WALL_DIR"/*; do
     [[ -f "$file" ]] || continue
     name=$(basename "$file")
     thumb="$CACHE_DIR/$name"
-    [[ -f "$thumb" ]] || thumb="$file" # Fallback to original image if thumbnail doesn't exist
+    if [[ ! -f "$thumb" ]]; then
+        if command -v magick &> /dev/null; then
+            magick "$file" -strip -resize 400x225^ -gravity center -extent 400x225 "$thumb"
+        elif command -v convert &> /dev/null; then
+            convert "$file" -strip -resize 400x225^ -gravity center -extent 400x225 "$thumb"
+        else
+            thumb="$file" # Fallback to original image if ImageMagick is missing
+        fi
+    fi
     NAMES+=("$name")
     THUMBS+=("$thumb")
 done
