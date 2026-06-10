@@ -26,7 +26,7 @@ mkdir -p ~/.config/rofi ~/.local/bin ~/.cache/rofi-wallpapers
 curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/wallpapers.rasi \
     -o ~/.config/rofi/wallpapers.rasi
 
-curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/cambiar_fondo.sh \
+curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/change_wall.sh \
     -o ~/.local/bin/change_wall
 
 chmod +x ~/.local/bin/change_wall

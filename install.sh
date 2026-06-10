@@ -1,62 +1,51 @@
 #!/usr/bin/env bash
-WALL_DIR="${ROFI_WALL_DIR:-$HOME/wallpapers}"
-CACHE_DIR="$HOME/.cache/rofi-wallpapers"
-TMP=$(mktemp)
 
-NAMES=()
-THUMBS=()
-for file in "$WALL_DIR"/*; do
-    [[ -f "$file" ]] || continue
-    name=$(basename "$file")
-    thumb="$CACHE_DIR/$name"
-    NAMES+=("$name")
-    THUMBS+=("$thumb")
-done
+echo "Installing rofi-wallpaper-changer..."
 
-TOTAL=${#NAMES[@]}
-if (( TOTAL == 0 )); then
-    echo "No wallpapers found in $WALL_DIR"
-    echo "Set your wallpaper directory: export ROFI_WALL_DIR=~/your/folder"
-    rm "$TMP"
-    exit 1
+# Create directories
+mkdir -p ~/.config/rofi ~/.local/bin ~/.cache/rofi-wallpapers
+
+# Download files
+echo "Downloading files..."
+curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/wallpapers.rasi -o ~/.config/rofi/wallpapers.rasi
+curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/change_wall.sh -o ~/.local/bin/change_wall
+chmod +x ~/.local/bin/change_wall
+
+# Ask for wallpaper folder
+read -e -p "Enter the full path to your wallpapers directory (e.g., ~/wallpapers): " WALL_DIR
+
+# Handle empty input or default
+if [[ -z "$WALL_DIR" ]]; then
+    WALL_DIR="$HOME/wallpapers"
 fi
 
-# Approximate visible items on screen (adjust 1920 to your resolution)
-VISIBLE=$(( (1920 * 80 / 100) / 230 ))
-OFFSET=$(( VISIBLE / 2 ))
+# Expand tilde if present safely
+WALL_DIR="${WALL_DIR/#\~/$HOME}"
 
-# Rotate array so the list starts visually centered
-ROTATED_NAMES=()
-ROTATED_THUMBS=()
-START=$(( TOTAL - OFFSET ))
-for (( i=START; i<TOTAL; i++ )); do
-    ROTATED_NAMES+=("${NAMES[$i]}")
-    ROTATED_THUMBS+=("${THUMBS[$i]}")
-done
-for (( i=0; i<START; i++ )); do
-    ROTATED_NAMES+=("${NAMES[$i]}")
-    ROTATED_THUMBS+=("${THUMBS[$i]}")
-done
+if [[ ! -d "$WALL_DIR" ]]; then
+    echo "Warning: Directory $WALL_DIR does not exist. Creating it..."
+    mkdir -p "$WALL_DIR"
+fi
 
-# Write entries to rofi pipe
-for (( i=0; i<TOTAL; i++ )); do
-    printf "%s\0icon\x1f%s\n" "${ROTATED_NAMES[$i]}" "${ROTATED_THUMBS[$i]}"
-done > "$TMP"
+# Determine shell and config file
+SHELL_RC="$HOME/.bashrc"
+if [[ "$SHELL" == *"zsh"* ]]; then
+    SHELL_RC="$HOME/.zshrc"
+fi
 
-selected=$(
-    rofi \
-        -dmenu \
-        -selected-row 0 \
-        -theme ~/.config/rofi/wallpapers.rasi \
-        < "$TMP"
-)
+# Add to shell config if not already there
+if grep -q "export ROFI_WALL_DIR=" "$SHELL_RC"; then
+    echo "Updating existing ROFI_WALL_DIR in $SHELL_RC..."
+    sed -i "s|export ROFI_WALL_DIR=.*|export ROFI_WALL_DIR=\"$WALL_DIR\"|" "$SHELL_RC"
+else
+    echo "Adding ROFI_WALL_DIR to $SHELL_RC..."
+    echo "" >> "$SHELL_RC"
+    echo "# rofi-wallpaper-changer" >> "$SHELL_RC"
+    echo "export ROFI_WALL_DIR=\"$WALL_DIR\"" >> "$SHELL_RC"
+fi
 
-rm "$TMP"
-[[ -z "$selected" ]] && exit
-
-wall="$WALL_DIR/$selected"
-hyprctl hyprpaper preload "$wall"
-for m in $(hyprctl monitors -j | jq -r '.[].name'); do
-    hyprctl hyprpaper wallpaper "$m,$wall"
-done
-hyprctl hyprpaper unload unused
+echo ""
+echo "Installation complete!"
+echo "Make sure to place some wallpapers in $WALL_DIR"
+echo "Restart your terminal or run: source $SHELL_RC"
+echo "Then, you can use the command 'change_wall' to open the picker."
