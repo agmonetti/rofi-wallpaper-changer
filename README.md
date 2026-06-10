@@ -61,6 +61,36 @@ VISIBLE=$(( (1920 * 80 / 100) / 230 ))
 #           ^^^^— your horizontal resolution
 ```
 
+### wallpapers.rasi
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `width` | `80%` | Width of the rofi window relative to screen |
+| `height` | `280px` | Height of the rofi window |
+| `spacing` | `-45px` | Overlap between images. More negative = more overlap |
+| `size` (element-icon) | `220px` | Thumbnail display size |
+
+> On smaller monitors, consider reducing `spacing` to `-20px` or `0px` to avoid excessive overlap.
+
+### change_wall.sh
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ROFI_WALL_DIR` | `~/wallpapers` | Path to your wallpapers folder, set via env variable |
+| `VISIBLE` | calculated from 1920px | Estimated number of visible items used for centering |
+
+### Thumbnail cache
+
+On first run, ImageMagick automatically generates small previews of your wallpapers and stores them in `~/.cache/rofi-wallpapers/`. This makes the picker load fast every time.
+
+You only need to clear the cache if you **add, remove, or replace** a wallpaper file:
+
+```bash
+rm -rf ~/.cache/rofi-wallpapers/*
+```
+
+Next time you run `change_wall`, the previews will be regenerated automatically.
+
 ## Notes
 
 - Thumbnails are read from `~/.cache/rofi-wallpapers/` — filenames must match your wallpaper filenames.

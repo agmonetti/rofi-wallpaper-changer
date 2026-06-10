@@ -31,6 +31,9 @@ fi
 SHELL_RC="$HOME/.bashrc"
 if [[ "$SHELL" == *"zsh"* ]]; then
     SHELL_RC="$HOME/.zshrc"
+    
+elif [[ "$SHELL" == *"fish"* ]]; then
+    SHELL_RC="$HOME/.config/fish/config.fish"
 fi
 
 # Ensure ~/.local/bin is in PATH

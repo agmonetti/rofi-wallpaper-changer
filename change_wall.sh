@@ -16,6 +16,7 @@ for file in "$WALL_DIR"/*; do
         elif command -v convert &> /dev/null; then
             convert "$file" -strip -resize 400x225^ -gravity center -extent 400x225 "$thumb"
         else
+        	echo "Warning: ImageMagick not found, install it for better performance: sudo pacman -S imagemagick"
             thumb="$file" # Fallback to original image if ImageMagick is missing
         fi
     fi
