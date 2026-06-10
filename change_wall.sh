@@ -12,9 +12,9 @@ for file in "$WALL_DIR"/*; do
     thumb="$CACHE_DIR/$name"
     if [[ ! -f "$thumb" ]]; then
         if command -v magick &> /dev/null; then
-            magick "$file" -strip -resize 400x225^ -gravity center -extent 400x225 "$thumb"
+            magick "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
         elif command -v convert &> /dev/null; then
-            convert "$file" -strip -resize 400x225^ -gravity center -extent 400x225 "$thumb"
+            convert "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
         else
             thumb="$file" # Fallback to original image if ImageMagick is missing
         fi
