@@ -29,8 +29,6 @@ element {
     orientation: vertical;
     padding: 0px;
     border: 0px;
-    width: 220px;
-    expand: false;
     background-color: transparent;
     children: [element-icon];
 }
