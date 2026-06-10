@@ -4,6 +4,16 @@ A minimal wallpaper switcher using rofi with a horizontal icon-based picker. Bui
 
 ![preview](preview.png)
 
+## Quick Update / Clean Install (For Testing)
+
+If you are updating or testing changes, copy-paste these commands to clean the cache, install dependencies, and re-run the script:
+
+```bash
+sudo pacman -S imagemagick
+rm -rf ~/.cache/rofi-wallpapers/*
+bash <(curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/install.sh)
+```
+
 ## Dependencies
 
 - `rofi`
