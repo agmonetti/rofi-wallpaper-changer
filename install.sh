@@ -39,18 +39,30 @@ fi
 # Ensure ~/.local/bin is in PATH
 if ! grep -q 'export PATH=.*\$HOME/.local/bin' "$SHELL_RC" && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     echo "Adding ~/.local/bin to PATH in $SHELL_RC..."
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$SHELL_RC"
+    if [[ "$SHELL" == *"fish"* ]]; then
+        echo 'set -x PATH $HOME/.local/bin $PATH' >> "$SHELL_RC"
+    else
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$SHELL_RC"
+    fi
 fi
 
 # Add to shell config if not already there
-if grep -q "export ROFI_WALL_DIR=" "$SHELL_RC"; then
+if grep -q "ROFI_WALL_DIR" "$SHELL_RC"; then
     echo "Updating existing ROFI_WALL_DIR in $SHELL_RC..."
-    sed -i "s|export ROFI_WALL_DIR=.*|export ROFI_WALL_DIR=\"$WALL_DIR\"|" "$SHELL_RC"
+    if [[ "$SHELL" == *"fish"* ]]; then
+        sed -i "s|set -x ROFI_WALL_DIR.*|set -x ROFI_WALL_DIR \"$WALL_DIR\"|" "$SHELL_RC"
+    else
+        sed -i "s|export ROFI_WALL_DIR=.*|export ROFI_WALL_DIR=\"$WALL_DIR\"|" "$SHELL_RC"
+    fi
 else
     echo "Adding ROFI_WALL_DIR to $SHELL_RC..."
     echo "" >> "$SHELL_RC"
     echo "# rofi-wallpaper-changer" >> "$SHELL_RC"
-    echo "export ROFI_WALL_DIR=\"$WALL_DIR\"" >> "$SHELL_RC"
+    if [[ "$SHELL" == *"fish"* ]]; then
+        echo "set -x ROFI_WALL_DIR \"$WALL_DIR\"" >> "$SHELL_RC"
+    else
+        echo "export ROFI_WALL_DIR=\"$WALL_DIR\"" >> "$SHELL_RC"
+    fi
 fi
 
 echo ""
