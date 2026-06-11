@@ -4,22 +4,31 @@ WALL_DIR="${ROFI_WALL_DIR:-$(cat "$CONFIG_FILE" 2>/dev/null)}"
 WALL_DIR="${WALL_DIR:-$HOME/wallpapers}"
 CACHE_DIR="$HOME/.cache/rofi-wallpapers"
 mkdir -p "$CACHE_DIR"
-TMP=$(mktemp)
 
+# Remove orphan thumbnails
+for thumb in "$CACHE_DIR"/*; do
+    [[ -f "$thumb" ]] || continue
+    name=$(basename "$thumb")
+    [[ ! -f "$WALL_DIR/$name" ]] && rm "$thumb"
+done
+
+TMP=$(mktemp)
 NAMES=()
 THUMBS=()
 for file in "$WALL_DIR"/*; do
     [[ -f "$file" ]] || continue
     name=$(basename "$file")
     thumb="$CACHE_DIR/$name"
+    
+    # Generate perfect square thumbnails (250x250)
     if [[ ! -f "$thumb" ]]; then
         if command -v magick &> /dev/null; then
-            magick "$file" -strip -resize 400x225^ -gravity center -extent 400x225 "$thumb"
+            magick "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
         elif command -v convert &> /dev/null; then
-            convert "$file" -strip -resize 400x225^ -gravity center -extent 400x225 "$thumb"
+            convert "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
         else
-        	echo "Warning: ImageMagick not found, install it for better performance: sudo pacman -S imagemagick"
-            thumb="$file" # Fallback to original image if ImageMagick is missing
+            echo "Warning: ImageMagick not found, install it for better performance: sudo pacman -S imagemagick"
+            thumb="$file"
         fi
     fi
     NAMES+=("$name")
@@ -34,7 +43,8 @@ if (( TOTAL == 0 )); then
     exit 1
 fi
 
-VISIBLE=$(( (1920 * 80 / 100) / 230 ))
+# Calculate visible elements for centering (Adjusted to 265 for 250px size + 15px spacing)
+VISIBLE=$(( (1920 * 80 / 100) / 265 ))
 OFFSET=$(( VISIBLE / 2 ))
 
 ROTATED_NAMES=()
@@ -69,6 +79,5 @@ hyprctl hyprpaper preload "$wall"
 for m in $(hyprctl monitors -j | jq -r '.[].name'); do
     hyprctl hyprpaper wallpaper "$m,$wall"
 done
-
 echo "$wall" > "$HOME/.cache/last_wallpaper"
 hyprctl hyprpaper unload unused

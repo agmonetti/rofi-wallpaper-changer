@@ -4,8 +4,8 @@
 }
 
 window {
-    width: 80%;
-    height: 280px;
+    width: 70%;
+    height: 300px;
     anchor: center;
     location: center;
     background-color: transparent;
@@ -19,7 +19,7 @@ mainbox {
 
 listview {
     layout: horizontal;
-    spacing: -45px;
+    spacing: 0px; 
     scrollbar: false;
     background-color: transparent;
     cycle: true;
@@ -34,11 +34,9 @@ element {
 }
 
 element selected {
-    text-color: #89b4fa;
+    background-color: transparent;
     border: 0px 0px 4px 0px;
     border-color: #89b4fa;
-    border-radius: 0px;
-    background-color: transparent;
 }
 
 element-icon {
