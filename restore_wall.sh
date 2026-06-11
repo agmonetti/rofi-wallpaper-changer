@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 LAST="$HOME/.cache/last_wallpaper"
-WALL_DIR="${ROFI_WALL_DIR:-$HOME/wallpapers}"
+CONFIG_FILE="$HOME/.config/rofi-wallpaper-changer/wall_dir"
+WALL_DIR="${ROFI_WALL_DIR:-$(cat "$CONFIG_FILE" 2>/dev/null)}"
+WALL_DIR="${WALL_DIR:-$HOME/wallpapers}"
 
 if [[ ! -f "$LAST" ]]; then
     wall=$(find "$WALL_DIR" -type f | sort | head -n 1)

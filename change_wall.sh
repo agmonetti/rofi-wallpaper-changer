@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-WALL_DIR="${ROFI_WALL_DIR:-$HOME/wallpapers}"  # Use environment variable if it exists, otherwise default to ~/wallpapers
+CONFIG_FILE="$HOME/.config/rofi-wallpaper-changer/wall_dir"
+WALL_DIR="${ROFI_WALL_DIR:-$(cat "$CONFIG_FILE" 2>/dev/null)}"
+WALL_DIR="${WALL_DIR:-$HOME/wallpapers}"
 CACHE_DIR="$HOME/.cache/rofi-wallpapers"
 mkdir -p "$CACHE_DIR"
 TMP=$(mktemp)

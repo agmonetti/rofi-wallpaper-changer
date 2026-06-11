@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 echo "Installing rofi-wallpaper-changer..."
 
 # Create directories
@@ -10,11 +9,10 @@ echo "Downloading files..."
 curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/wallpapers.rasi -o ~/.config/rofi/wallpapers.rasi
 curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/change_wall.sh -o ~/.local/bin/change_wall
 chmod +x ~/.local/bin/change_wall
-
 curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/restore_wall.sh -o ~/.local/bin/restore_wall
 chmod +x ~/.local/bin/restore_wall
 
-# crear hyprpaper.conf
+# Create hyprpaper.conf
 mkdir -p ~/.config/hypr
 echo "splash = false" > ~/.config/hypr/hyprpaper.conf
 
@@ -34,11 +32,14 @@ if [[ ! -d "$WALL_DIR" ]]; then
     mkdir -p "$WALL_DIR"
 fi
 
+# Save WALL_DIR to config file so scripts can read it without shell env
+mkdir -p "$HOME/.config/rofi-wallpaper-changer"
+echo "$WALL_DIR" > "$HOME/.config/rofi-wallpaper-changer/wall_dir"
+
 # Determine shell and config file
 SHELL_RC="$HOME/.bashrc"
 if [[ "$SHELL" == *"zsh"* ]]; then
     SHELL_RC="$HOME/.zshrc"
-    
 elif [[ "$SHELL" == *"fish"* ]]; then
     SHELL_RC="$HOME/.config/fish/config.fish"
 fi
@@ -53,7 +54,7 @@ if ! grep -q 'export PATH=.*\$HOME/.local/bin' "$SHELL_RC" && [[ ":$PATH:" != *"
     fi
 fi
 
-# Add to shell config if not already there
+# Add ROFI_WALL_DIR to shell config
 if grep -q "ROFI_WALL_DIR" "$SHELL_RC"; then
     echo "Updating existing ROFI_WALL_DIR in $SHELL_RC..."
     if [[ "$SHELL" == *"fish"* ]]; then
