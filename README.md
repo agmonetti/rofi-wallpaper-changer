@@ -14,8 +14,7 @@ A minimal wallpaper switcher using rofi with a horizontal icon-based picker. Bui
 ## Install
 
 ```bash
-bash <(curl -s [https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/install.sh](https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/install.sh))
-
+bash <(curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/install.sh)
 ```
 
 The installer will ask for your wallpapers folder and save it automatically to your shell config.
