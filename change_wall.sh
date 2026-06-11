@@ -22,12 +22,12 @@ for file in "$WALL_DIR"/*; do
     
     # Generate perfect square thumbnails (250x250)
     if [[ ! -f "$thumb" ]]; then
-        if command -v magick &> /dev/null; then
-            magick "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
-        elif command -v convert &> /dev/null; then
-            convert "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
+        if [ -f /usr/bin/magick ]; then
+            /usr/bin/magick "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
+        elif [ -f /usr/bin/convert ]; then
+            /usr/bin/convert "$file" -strip -resize 250x250^ -gravity center -extent 250x250 "$thumb"
         else
-            echo "Warning: ImageMagick not found, install it for better performance: sudo pacman -S imagemagick"
+            echo "Warning: ImageMagick not found at /usr/bin/magick"
             thumb="$file"
         fi
     fi
