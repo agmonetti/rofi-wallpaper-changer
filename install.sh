@@ -11,6 +11,13 @@ curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/
 curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/change_wall.sh -o ~/.local/bin/change_wall
 chmod +x ~/.local/bin/change_wall
 
+curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/restore_wall.sh -o ~/.local/bin/restore_wall
+chmod +x ~/.local/bin/restore_wall
+
+# crear hyprpaper.conf
+mkdir -p ~/.config/hypr
+echo "splash = false" > ~/.config/hypr/hyprpaper.conf
+
 # Ask for wallpaper folder
 read -e -p "Enter the full path to your wallpapers directory (e.g., ~/wallpapers): " WALL_DIR
 
@@ -70,3 +77,8 @@ echo "Installation complete!"
 echo "Make sure to place some wallpapers in $WALL_DIR"
 echo "Restart your terminal or run: source $SHELL_RC"
 echo "Then, you can use the command 'change_wall' to open the picker."
+echo ""
+echo "Add these lines to your hyprland.conf:"
+echo "  exec-once = hyprpaper"
+echo "  exec-once = restore_wall"
+echo "  bind = \$mainMod, W, exec, ~/.local/bin/change_wall"

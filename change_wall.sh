@@ -67,4 +67,6 @@ hyprctl hyprpaper preload "$wall"
 for m in $(hyprctl monitors -j | jq -r '.[].name'); do
     hyprctl hyprpaper wallpaper "$m,$wall"
 done
+
+echo "$wall" > "$HOME/.cache/last_wallpaper"
 hyprctl hyprpaper unload unused

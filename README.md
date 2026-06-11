@@ -30,7 +30,10 @@ curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/
 curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/change_wall.sh \
     -o ~/.local/bin/change_wall
 
-chmod +x ~/.local/bin/change_wall
+curl -s https://raw.githubusercontent.com/agmonetti/rofi-wallpaper-changer/main/restore_wall.sh \
+    -o ~/.local/bin/restore_wall
+
+chmod +x ~/.local/bin/change_wall ~/.local/bin/restore_wall
 ```
 
 Then set your wallpapers directory in your `.bashrc` or `.zshrc`:
@@ -39,6 +42,18 @@ Then set your wallpapers directory in your `.bashrc` or `.zshrc`:
 export ROFI_WALL_DIR=~/your/wallpapers/folder
 ```
 
+## Hyprland setup
+
+Add these lines to your `~/.config/hypr/hyprland.conf`:
+
+```
+exec-once = hyprpaper
+exec-once = restore_wall
+bind = $mainMod, W, exec, ~/.local/bin/change_wall
+```
+
+On every boot, `restore_wall` automatically restores the last wallpaper you picked. On first run, it picks the first wallpaper in your folder alphabetically.
+
 ## Usage
 
 Run it from terminal:
@@ -46,10 +61,7 @@ Run it from terminal:
 change_wall
 ```
 
-Or bind it to a key in your Hyprland config (`~/.config/hypr/hyprland.conf`):
-```
-bind = $mainMod, W, exec, ~/.local/bin/change_wall
-```
+Or use the keybind you set in your Hyprland config.
 
 Navigate with arrow keys, confirm with Enter, cancel with Escape.
 
@@ -93,6 +105,5 @@ Next time you run `change_wall`, the previews will be regenerated automatically.
 
 ## Notes
 
-- Thumbnails are read from `~/.cache/rofi-wallpapers/` — filenames must match your wallpaper filenames.
 - Works with multiple monitors via `hyprctl`.
 - Theme is fully transparent, designed to blend with any wallpaper.
