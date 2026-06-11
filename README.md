@@ -54,6 +54,15 @@ bind = $mainMod, W, exec, ~/.local/bin/change_wall
 
 On every boot, `restore_wall` automatically restores the last wallpaper you picked. On first run, it picks the first wallpaper in your folder alphabetically.
 
+## How it works
+
+1. `change_wall` opens the rofi picker — choose a wallpaper and it applies instantly.
+2. The chosen wallpaper is saved to `~/.cache/last_wallpaper`.
+3. On next boot, `restore_wall` reads that file and restores it automatically.
+4. On first boot (no wallpaper chosen yet), `restore_wall` picks the first wallpaper in your folder alphabetically.
+
+Your wallpaper directory is saved to `~/.config/rofi-wallpaper-changer/wall_dir` during install, so both scripts work correctly even without a shell session (e.g. when called from Hyprland on boot).
+
 ## Usage
 
 Run it from terminal:
