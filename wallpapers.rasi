@@ -1,25 +1,35 @@
+/* rofi-wallpaper-changer — horizontal picker with overlapping square cards.
+ * Cards are 220px wide with spacing -40px, so each one covers the previous
+ * card's right edge. Rofi paints the selection decoration above neighbouring
+ * cards, so the highlight is a left accent bar: that edge is the only part of
+ * the selected card that is never covered by the overlap. change_wall adds a
+ * left margin so a short row stays centered. */
+
 * {
     background-color: transparent;
-    text-color: #ffffff; 
+    text-color: #ffffff;
 }
 
 window {
-    width: 70%;
-    height: 300px;
+    width: 80%;
+    height: 270px;
     anchor: center;
     location: center;
+    /* No panel: only the cards are drawn, directly over the desktop. */
     background-color: transparent;
-    border: 0;
+    border: 0px;
+    padding: 20px;
 }
 
 mainbox {
     children: [ listview ];
+    spacing: 0px;
     background-color: transparent;
 }
 
 listview {
     layout: horizontal;
-    spacing: 0px; 
+    spacing: -40px;
     scrollbar: false;
     background-color: transparent;
     cycle: true;
@@ -28,26 +38,21 @@ listview {
 element {
     orientation: vertical;
     padding: 0px;
-    border: 0px;
+    /* Left accent only: the selected card's right edge is covered by the next
+     * card, so a full frame would be painted on top of the overlap. Reserved
+     * on every card so selecting never shifts the row. */
+    border: 0px 0px 0px 6px;
+    border-color: transparent;
     background-color: transparent;
-    children: [element-icon];
+    children: [ element-icon ];
 }
 
 element selected {
-    background-color: transparent;
-    border: 0px 0px 4px 0px;
     border-color: #89b4fa;
 }
 
 element-icon {
-    size: 220px; 
+    size: 220px;
     horizontal-align: 0.5;
     vertical-align: 0.5;
-}
-
-element-text {
-    font: "JetBrainsMono Nerd Font 10";
-    text-color: inherit; 
-    horizontal-align: 0.5;
-    margin: 6px 0px 0px 0px; 
 }
